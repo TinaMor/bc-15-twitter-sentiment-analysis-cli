@@ -5,6 +5,11 @@ import json
 import sys
 import string
 import datetime
+import re
+import stopWords_module
+import operator 
+from collections import Counter
+from tabulate import tabulate
 
 APP_KEY = '911OxmuGGaf2hIqEde5GHWdtt'
 APP_SECRET = 'SKikxopjCYagMFWsNAANV2i7I4TAeHpDc4APeJso3ZbbmG2BSF'
@@ -16,14 +21,14 @@ twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
 
 def check_no_input():
 	# print ("\n\nEnter the number of tweets you want to fetch from the user's timeline")
-	num_of_tweets = input("The value should be a positive integer between 1 and 200. Default == 20\t")
+	num_of_tweets = input("\nThe value should be a positive integer between 1 and 200. Default == 20\t")
 
 		# Check the input for number of tweets to fetch
 	if num_of_tweets == '':
 		num_of_tweets = 20
 		return(num_of_tweets)
 	elif str(num_of_tweets).isnumeric() == False: 
-		print("Please enter an integer between 1 and 200")
+		print("\nPlease enter an integer between 1 and 200")
 		iters = 0
 		while iters < 3:
 			if str(num_of_tweets).isnumeric() == False:
@@ -32,7 +37,7 @@ def check_no_input():
 				num_of_tweets = input('Re-enter value: ')
 
 			else:
-				break
+				return(num_of_tweets)
 			iters += 1
 	elif str(num_of_tweets).isnumeric() == True:
 		num_of_tweets = int(num_of_tweets)
@@ -47,16 +52,46 @@ def check_no_input():
 		else:
 			return(num_of_tweets)
 
+def check_common_input():
+	# print ("\n\nEnter the number of tweets you want to fetch from the user's timeline")
+	most_common_input = input("\nPlease enter a positive integer\t")
+
+		# Check the input for number of tweets to fetch
+	if str(most_common_input).isnumeric() == False:
+		print("\nPlease enter a positive integer")
+		iters = 0
+		while iters < 1:
+			if str(most_common_input).isnumeric() == False:
+				print ("\nThe value should be a positive integer\t")
+				most_common_input = input('Re-enter value: ')
+
+			else:
+				return(most_common_input)
+			iters += 1
+	elif str(most_common_input).isnumeric() == True:
+		most_common_input = int(most_common_input)
+		#Any values above 200 are defaulted to 200
+		if most_common_input < 1:
+			most_common_input = None
+			return(most_common_input)
+		else:
+			return(most_common_input)
+
+
 def user_handle():
 	#username = 'TSvelte'
-	uName = input("Enter user's Twitter handle: ")
+	uName = input("\nEnter user's Twitter handle: ")
 	return uName
+
 
 def get_tweets():
 
 	username = user_handle()
 	noOfTweets = check_no_input()
-	#no_of_tweets = 2
+
+	print('\n-----------------------')
+	print('Word frequency for {0} for {1} tweets'.format(username, noOfTweets))
+	print('-----------------------\n')
 
 	#user_tweets = twitter.get_home_timeline(screen_name = username, count	= no_of_tweets)
 	user_TL= twitter.get_user_timeline(screen_name = username, count = noOfTweets, include_rts = False) # include_retweets
@@ -64,42 +99,66 @@ def get_tweets():
 	userTL_tweets = []
 
 	#Save the tweets in a JSON file
-	for i in tqdm(range(0, len(user_TL)), desc = 'Fetching tweets'):
+	for i in tqdm(range(len(user_TL)), desc = 'Fetching tweets'):
 		time.sleep(.5)
 		with open('userTweets.json', 'w') as outfile:
 			for tweet in user_TL:
-				userTL_tweets.append(tweet['text'])
+				userTL_tweets.append(re.sub(r'[^\x00-\x7F]+', '', tweet['text'])) # Remove unicode text
 
 			json.dump(userTL_tweets[1:], outfile)
 
-			return user_TL
-
+			return userTL_tweets
 
 
 def remove_stop_words():
 
-	with open('stop_words_list.txt') as f:
-		stop_words = f.readlines()
+	forbidden_words = stopWords_module.stopWords_list_func()
 
-	stopWords = [x.strip() for x in stop_words] 
+	tokens_re = forbidden_words[0]
+	emoticon_re = forbidden_words[1]
+	stop_words = forbidden_words[2]
+	punct =  forbidden_words[3]
 
-	user_TL = get_tweets()
+	status = get_tweets()
 
 	filtered_tweets = []
 
-	for i in range(len(user_TL)):
+	for i in range(len(status)):
+	
+		allWords = tokens_re.findall(status[i])
+		allWords = [token if emoticon_re.search(token) else token.lower() for token in allWords]
+
 		filtered_TL = []
-		word_tokens = (user_TL[i]).split()
-		filtered_TL = [w for w in word_tokens if not w in stop_words]
-		filtered_tweets.append(filtered_TL)
+		word_tokens = (status[i]).split()
+		#filtered_TL = [w for w in word_tokens.encode('utf-8').lower() if not w in stop_words]
+		filtered_TL = [w for w in word_tokens if not w in filtered_tweets]
 
-	print (filtered_tweets)
-
-
-
-
+		#filtered_tweets.append(filtered_TL)
+		
+		filtered_tweets = filtered_tweets + allWords
 
 
+	terms_stop = [text for text in filtered_tweets if text.lower() not in stop_words]
+	terms_stop = [text for text in terms_stop if text.lower() not in punct]
+
+	return (terms_stop)
+
+
+def word_counter():
+
+    list_of_words = remove_stop_words()
+    word_freq = Counter(list_of_words)
+
+    #n = check_common_input()
+    oupt = word_freq.most_common(10)
+
+    print (tabulate(oupt, ["WORD", "FREQUENCY"], tablefmt="fancy_grid"))
+
+    # for l in set(list_of_words):
+    # 	print ('%s : %d' % (l, word_freq[l]))
+
+    # for letter, count in word_freq.most_common(n):
+    # 	return ('%s: %7d' % (letter, count))
 
 def sentiment_analysis():
 
@@ -109,5 +168,5 @@ def sentiment_analysis():
 
 	pass
 	
-#remove_stop_words()
-get_tweets()
+
+word_counter()
