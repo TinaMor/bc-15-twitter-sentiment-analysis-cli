@@ -87,16 +87,9 @@ def user_handle():
 def get_tweets():
 
 	username = user_handle()
-	noOfTweets = check_no_input()
+	#noOfTweets = check_no_input()
 
-	print('\n-----------------------')
-	print('Word frequency for {0} for {1} tweets'.format(username, noOfTweets))
-	print('-----------------------\n')
-
-	#user_tweets = twitter.get_home_timeline(screen_name = username, count	= no_of_tweets)
-	user_TL= twitter.get_user_timeline(screen_name = username, count = noOfTweets, include_rts = False) # include_retweets
-
-	print ('\n-----------------------', len(user_TL))
+	user_TL= twitter.get_user_timeline(screen_name = username, count = 200, include_rts = False) # include_retweets
 
 	userTL_tweets = []
 
@@ -109,19 +102,26 @@ def get_tweets():
 
 			json.dump(userTL_tweets[1:], outfile)
 
-			return userTL_tweets
+	#toReturn = {('tweets',tuple(userTL_tweets)), ('username', username), ('noOfTweets', noOfTweets)}
+	toReturn = {('tweets',tuple(userTL_tweets)), ('username', username)}
+	toReturn = dict(toReturn)
+
+	return toReturn
 
 
 def filtered_Posts():
 
 	forbidden_words = stopWords_module.stopWords_list_func()
 
-	tokens_re = forbidden_words[0]
-	emoticon_re = forbidden_words[1]
-	stop_words = forbidden_words[2]
-	punct =  forbidden_words[3]
+	tokens_re = forbidden_words['tokens_re']
+	emoticon_re = forbidden_words['emoticon_re']
+	stop_words = forbidden_words['stopWords']
+	punct =  forbidden_words['punct']
+
 
 	status = get_tweets()
+	status = status['tweets']
+
 
 	filtered_tweets = []
 
@@ -145,14 +145,14 @@ def filtered_Posts():
 
 	return (terms_stop)
 
-
 def word_counter():
 
     list_of_words = filtered_Posts()
     word_freq = Counter(list_of_words)
 
     #n = check_common_input()
-    oupt = word_freq.most_common(10)
+    oupt = word_freq.most_common(10) #type == list
+    # [('s', 25), ('@andela', 18), ('amp', 18), ('@kentbeck', 17), ('us', 14), ('w', 13), ('thank', 12), ('awesome', 11), ('tech', 9), ('joining', 9)]
 
     print (tabulate(oupt, ["WORD", "FREQUENCY"], tablefmt="fancy_grid"))
 
@@ -162,4 +162,4 @@ def word_counter():
     # for letter, count in word_freq.most_common(n):
     # 	return ('%s: %7d' % (letter, count))
 
-get_tweets()
+#word_counter()
