@@ -9,10 +9,13 @@ alchemy_language = AlchemyLanguageV1(api_key = API_KEY)
 
 def sentiment_Analysis():
 
-	tweet_posts = get_tweets()
+	status = get_tweets()
+
+	tweet_posts = status['tweets']
+	uname = status['username']
 
 	print('\n-----------------------')
-	print('Twitter Sentiment Analysis for {0} for {1} tweets'.format(get_tweets.username, get_tweets.noOfTweets))
+	print('Twitter Sentiment Analysis for {0} tweets'.format(uname))
 	print('-----------------------\n')
 
 	sent_opt = (json.dumps(
@@ -27,3 +30,5 @@ def sentiment_Analysis():
 	#'docSentiment': {'score': '0.496962', 'type': 'positive'}}
 
 	print ("Sentiment Analysis on {0}'s timeline are {1} with a sentiment strength score of {2}".format('username', sentiment_type, score))
+
+#sentiment_Analysis()
