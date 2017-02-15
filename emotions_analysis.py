@@ -16,20 +16,22 @@ def emotions_Analysis():
 	tweet_posts = status['tweets']
 	uname = status['username']
 
-	print('\n-----------------------')
-	print('Twitter Emotion Analysis for {0} tweets'.format(uname))
-	print('-----------------------\n')
+	if tweet_posts == '':
+		print ("Emotion Analysis on {0}'s timeline not performed".format(uname))
 
-	emotions_opt = (json.dumps(
-		alchemy_language.emotion(
-			text = tweet_posts),
-		indent = 2))
+	else:
+		print('\n-----------------------')
+		print('Twitter Emotion Analysis for {0} tweets'.format(uname))
+		print('-----------------------\n')
 
-	emotionsAnalysis = json.loads(emotions_opt)
-	emotionsDict = emotionsAnalysis['docEmotions']
-	# Sort and convert to alist for tabulation
-	emotionsList = [(k, emotionsDict[k]) for k in sorted(emotionsDict, key=emotionsDict.get, reverse=True)]
+		emotions_opt = (json.dumps(
+			alchemy_language.emotion(
+				text = tweet_posts),
+			indent = 2))
 
-	print (tabulate(emotionsList, ["EMOTION", "SCORE"], tablefmt="fancy_grid"))
+		emotionsAnalysis = json.loads(emotions_opt)
+		emotionsDict = emotionsAnalysis['docEmotions']
+		# Sort and convert to alist for tabulation
+		emotionsList = [(k, emotionsDict[k]) for k in sorted(emotionsDict, key=emotionsDict.get, reverse=True)]
 
-#emotions_Analysis()
+		print (tabulate(emotionsList, ["EMOTION", "SCORE"], tablefmt="fancy_grid"))

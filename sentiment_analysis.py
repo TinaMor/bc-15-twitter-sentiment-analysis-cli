@@ -14,21 +14,29 @@ def sentiment_Analysis():
 	tweet_posts = status['tweets']
 	uname = status['username']
 
-	print('\n-----------------------')
-	print('Twitter Sentiment Analysis for {0} tweets'.format(uname))
-	print('-----------------------\n')
+	if tweet_posts == '':
+		print ("Sentiment Analysis on {0}'s timeline not performed".format(uname))
 
-	sent_opt = (json.dumps(
-		alchemy_language.sentiment(
-			text = tweet_posts),
-		indent = 2))
+	else:
+		print('\n-----------------------')
+		print('Twitter Sentiment Analysis for {0} tweets'.format(uname))
+		print('-----------------------\n')
 
-	sentimentAnalysis = json.loads(sent_opt)
+		sent_opt = (json.dumps(
+			alchemy_language.sentiment(
+				text = tweet_posts),
+			indent = 2))
 
-	score = float(sentimentAnalysis['docSentiment']['score'])
-	sentiment_type = sentimentAnalysis['docSentiment']['type']
-	#'docSentiment': {'score': '0.496962', 'type': 'positive'}}
 
-	print ("Sentiment Analysis on {0}'s timeline are {1} with a sentiment strength score of {2}".format('username', sentiment_type, score))
+		sentimentAnalysis = json.loads(sent_opt)
+		sentiment_type = sentimentAnalysis['docSentiment']['type']
+
+		if sentiment_type == 'neutral':
+			score = float(0)
+		else:
+			score = float(sentimentAnalysis['docSentiment']['score'])
+
+
+		print ("Sentiment Analysis on {0}'s timeline are {1} with a sentiment strength score of {2}".format(uname, sentiment_type, score))
 
 #sentiment_Analysis()
