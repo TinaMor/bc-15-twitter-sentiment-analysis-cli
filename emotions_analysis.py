@@ -11,10 +11,13 @@ alchemy_language = AlchemyLanguageV1(api_key = API_KEY)
 
 def emotions_Analysis():
 
-	tweet_posts = get_tweets()
+	status = get_tweets()
+
+	tweet_posts = status['tweets']
+	uname = status['username']
 
 	print('\n-----------------------')
-	#print('Twitter Sentiment Analysis for {0} for {1} tweets'.format(get_tweets.username, get_tweets.noOfTweets))
+	print('Twitter Emotion Analysis for {0} tweets'.format(uname))
 	print('-----------------------\n')
 
 	emotions_opt = (json.dumps(
@@ -28,3 +31,5 @@ def emotions_Analysis():
 	emotionsList = [(k, emotionsDict[k]) for k in sorted(emotionsDict, key=emotionsDict.get, reverse=True)]
 
 	print (tabulate(emotionsList, ["EMOTION", "SCORE"], tablefmt="fancy_grid"))
+
+#emotions_Analysis()
