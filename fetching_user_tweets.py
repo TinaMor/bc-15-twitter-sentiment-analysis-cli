@@ -96,11 +96,13 @@ def get_tweets():
 	#user_tweets = twitter.get_home_timeline(screen_name = username, count	= no_of_tweets)
 	user_TL= twitter.get_user_timeline(screen_name = username, count = noOfTweets, include_rts = False) # include_retweets
 
+	print ('\n-----------------------', len(user_TL))
+
 	userTL_tweets = []
 
 	#Save the tweets in a JSON file
-	for i in tqdm(range(len(user_TL)), desc = 'Fetching tweets'):
-		time.sleep(.5)
+	for i in tqdm(range(0, len(user_TL)), desc = 'Fetching tweets', unit = 'Tweets'):
+		time.sleep(.05)
 		with open('userTweets.json', 'w') as outfile:
 			for tweet in user_TL:
 				userTL_tweets.append(re.sub(r'[^\x00-\x7F]+', '', tweet['text'])) # Remove unicode text
@@ -110,7 +112,7 @@ def get_tweets():
 			return userTL_tweets
 
 
-def remove_stop_words():
+def filtered_Posts():
 
 	forbidden_words = stopWords_module.stopWords_list_func()
 
@@ -146,7 +148,7 @@ def remove_stop_words():
 
 def word_counter():
 
-    list_of_words = remove_stop_words()
+    list_of_words = filtered_Posts()
     word_freq = Counter(list_of_words)
 
     #n = check_common_input()
@@ -160,13 +162,4 @@ def word_counter():
     # for letter, count in word_freq.most_common(n):
     # 	return ('%s: %7d' % (letter, count))
 
-def sentiment_analysis():
-
-	print('\n-----------------------')
-	print('Twitter Sentiment Analysis for {0} for {1} tweets'.format(username, noOfTweets))
-	print('-----------------------\n')
-
-	pass
-	
-
-word_counter()
+get_tweets()
