@@ -35,6 +35,8 @@ def stopWords_list_func():
 	tokens_re = re.compile(r'('+'|'.join(regex_str)+')', re.VERBOSE | re.IGNORECASE)
 	emoticon_re = re.compile(r'^'+emoticons_str+'$', re.VERBOSE | re.IGNORECASE)
 
-	return [tokens_re, emoticon_re, stopWords, punct]
+	all_stop_words = dict({('tokens_re',tokens_re), ('emoticon_re',emoticon_re), ('stopWords',tuple(stopWords)), ('punct',tuple(punct))})
 
-stopWords_list_func()
+	return all_stop_words
+
+#
