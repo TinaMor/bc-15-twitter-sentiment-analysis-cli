@@ -14,12 +14,16 @@ API_KEY = "74432c64897b5ad87a245807459cf995626087d9"
 
 alchemy_language = AlchemyLanguageV1(api_key = API_KEY)
 
-def sentiment_Analysis(tweet_posts = ''):
+def sentiment_Analysis(tweet_posts = '', source = 'function_input'):
 
-	status = get_tweets()
+	if source == 'user_input':
+		tweet_posts = tweet_posts['tweets']
+		uname = 'user input'
 
-	tweet_posts = status['tweets']
-	uname = status['username']
+	else:
+		status = get_tweets()
+		tweet_posts = status['tweets'] #<class 'tuple'>
+		uname = status['username']
 
 	if tweet_posts == '':
 		print ("Sentiment Analysis on {0}'s timeline not performed".format(uname))
@@ -45,7 +49,4 @@ def sentiment_Analysis(tweet_posts = ''):
 			score = float(sentimentAnalysis['docSentiment']['score'])
 
 
-		print ("Sentiment Analysis on {0}'s timeline are {1} with a sentiment strength score of {2}".format(uname, sentiment_type, score))
-		print ('\n\n')
-
-#sentiment_Analysis()
+		return ("Sentiment Analysis on {0} timeline is {1} with a sentiment strength score of {2}".format(uname, sentiment_type, score))
