@@ -108,7 +108,7 @@ def get_tweets():
 				for tweet in user_TL:
 					userTL_tweets.append(re.sub(r'[^\x00-\x7F]+', '', tweet['text'])) # Remove unicode text
 
-				json.dump(userTL_tweets[1:], outfile)
+				json.dump(userTL_tweets, outfile)
 
 		#toReturn = {('tweets',tuple(userTL_tweets)), ('username', username), ('noOfTweets', noOfTweets)}
 		tweets_toReturn = {('tweets',tuple(userTL_tweets)), ('username', username)}
@@ -128,7 +128,7 @@ def get_tweets():
 
 
 
-def filtered_Posts():
+def filtered_Posts(status = ''):
 
 	forbidden_words = stopWords_module.stopWords_list_func()
 
@@ -168,7 +168,7 @@ def filtered_Posts():
 
 		return (terms_stop)
 
-def word_counter():
+def word_counter(list_of_words = ''):
 
 
     list_of_words = filtered_Posts()

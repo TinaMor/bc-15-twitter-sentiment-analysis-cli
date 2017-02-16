@@ -14,7 +14,7 @@ API_KEY = "74432c64897b5ad87a245807459cf995626087d9"
 
 alchemy_language = AlchemyLanguageV1(api_key = API_KEY)
 
-def sentiment_Analysis():
+def sentiment_Analysis(tweet_posts = ''):
 
 	status = get_tweets()
 
