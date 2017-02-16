@@ -1,7 +1,14 @@
-from fetching_user_tweets import get_tweets
 import json
-from watson_developer_cloud import AlchemyLanguageV1
 import requests
+
+from colorama import *
+from docopt import docopt, DocoptExit
+from pyfiglet import figlet_format
+from termcolor import cprint
+from watson_developer_cloud import AlchemyLanguageV1
+
+from fetching_user_tweets import get_tweets
+
 
 API_KEY = "74432c64897b5ad87a245807459cf995626087d9"
 
@@ -16,11 +23,12 @@ def sentiment_Analysis():
 
 	if tweet_posts == '':
 		print ("Sentiment Analysis on {0}'s timeline not performed".format(uname))
+		cprint ('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++', 'magenta')
 
 	else:
-		print('\n-----------------------')
+		print ('\n')
+		cprint ('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++', 'magenta')
 		print('Twitter Sentiment Analysis for {0} tweets'.format(uname))
-		print('-----------------------\n')
 
 		sent_opt = (json.dumps(
 			alchemy_language.sentiment(
@@ -38,5 +46,6 @@ def sentiment_Analysis():
 
 
 		print ("Sentiment Analysis on {0}'s timeline are {1} with a sentiment strength score of {2}".format(uname, sentiment_type, score))
+		print ('\n\n')
 
 #sentiment_Analysis()

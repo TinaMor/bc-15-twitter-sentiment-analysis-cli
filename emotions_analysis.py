@@ -1,8 +1,14 @@
-from fetching_user_tweets import get_tweets
 import json
-from watson_developer_cloud import AlchemyLanguageV1
 import requests
+
+from colorama import *
+from docopt import docopt, DocoptExit
+from pyfiglet import figlet_format
 from tabulate import tabulate
+from termcolor import cprint
+from watson_developer_cloud import AlchemyLanguageV1
+
+from fetching_user_tweets import get_tweets
 
 
 API_KEY = "74432c64897b5ad87a245807459cf995626087d9"
@@ -18,11 +24,12 @@ def emotions_Analysis():
 
 	if tweet_posts == '':
 		print ("Emotion Analysis on {0}'s timeline not performed".format(uname))
+		cprint ('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++', 'magenta')
 
 	else:
-		print('\n-----------------------')
+		print ('\n')
+		cprint ('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++', 'magenta')
 		print('Twitter Emotion Analysis for {0} tweets'.format(uname))
-		print('-----------------------\n')
 
 		emotions_opt = (json.dumps(
 			alchemy_language.emotion(
@@ -35,3 +42,4 @@ def emotions_Analysis():
 		emotionsList = [(k, emotionsDict[k]) for k in sorted(emotionsDict, key=emotionsDict.get, reverse=True)]
 
 		print (tabulate(emotionsList, ["EMOTION", "SCORE"], tablefmt="fancy_grid"))
+		print ('\n')

@@ -1,15 +1,21 @@
-from twython import Twython, TwythonError
 import time
-from tqdm import tqdm
 import json
 import sys
 import string
 import datetime
 import re
-import stopWords_module
 import operator 
+
 from collections import Counter
+from colorama import *
+from pyfiglet import figlet_format
 from tabulate import tabulate
+from twython import Twython, TwythonError
+from termcolor import cprint
+from tqdm import tqdm
+
+import stopWords_module
+
 
 APP_KEY = '911OxmuGGaf2hIqEde5GHWdtt'
 APP_SECRET = 'SKikxopjCYagMFWsNAANV2i7I4TAeHpDc4APeJso3ZbbmG2BSF'
@@ -80,7 +86,6 @@ def check_common_input():
 """
 
 def user_handle():
-	#username = 'TSvelte'
 	uName = input("\nEnter user's Twitter handle: ")
 	return uName
 
@@ -112,7 +117,10 @@ def get_tweets():
 		return tweets_toReturn
 		
 	except TwythonError as e:
-		print ('\n', e.error_code, 'User {0} does not exist'.format(username))
+		print ('\n')
+		cprint ('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++', 'magenta')
+		print ('Error ', e.error_code, ': User {0} does not exist'.format(username))
+
 		tweets_toReturn = {('tweets',''), ('username', username)}
 		tweets_toReturn = dict(tweets_toReturn)
 
@@ -171,4 +179,7 @@ def word_counter():
     	print (tabulate(oupt, ["WORD", "FREQUENCY"], tablefmt="fancy_grid"))
 
     else:
-    	print ('No word frequency performed')
+    	cprint("No word frequency performed", 'cyan')
+    	print ('\n')
+
+#word_counter()
