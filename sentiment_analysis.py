@@ -33,6 +33,8 @@ def sentiment_Analysis(tweet_posts = '', source = 'function_input'):
 		print ('\n')
 		cprint ('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++', 'magenta')
 		print('Twitter Sentiment Analysis for {0} tweets'.format(uname))
+		print ('\n')
+
 
 		sent_opt = (json.dumps(
 			alchemy_language.sentiment(
