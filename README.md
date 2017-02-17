@@ -28,4 +28,4 @@ On your command line, run the command:
 python main.python
 
 You should see the following:
-![My image](TinaMor/bc-15-twitter-sentiment-analysis-cli/blob/wip/app_cli.JPG)
+![app_cli](TinaMor/bc-15-twitter-sentiment-analysis-cli/blob/wip/app_cli.JPG)
