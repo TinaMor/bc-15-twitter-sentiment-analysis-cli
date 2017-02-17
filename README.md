@@ -21,11 +21,13 @@ Additionally, this application performs an emotions analysis on tweets
 
 Installation
 The requirements.txt file has the list of all libraries that you need to install to run this application. On your environment or commandline, run the command:
-pip3 install -r requirements.txt
+
+            pip3 install -r requirements.txt
 
 Running the application
 On your command line, run the command:
-python main.python
+            
+            python main.python
 
 You should see the following:
-![app_cli](TinaMor/bc-15-twitter-sentiment-analysis-cli/blob/wip/app_cli.JPG)
+![app_cli](app_cli.JPG)
