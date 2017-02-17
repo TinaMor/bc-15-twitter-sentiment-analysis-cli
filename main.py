@@ -1,10 +1,3 @@
-
-# Functions:
-# 	get_tweets
-# 	word_counter
-# 	emotions_Analysis
-# 	sentiment_Analysis
-
 """
  This example uses docopt with the built in cmd module to demonstrate an
  interactive command application.
@@ -64,7 +57,7 @@ def docopt_cmd(func):
 
 class tsa(cmd.Cmd):
 	cprint ("\n")
-	cprint(figlet_format("TSA".center(30), font = "standard"), "yellow", attrs = ["bold"])
+	cprint(figlet_format("Sentiment Analysis".center(15), font = "standard"), "yellow", attrs = ["bold"])
 
 	def introduction():
 		""" TSA App commands
@@ -72,28 +65,28 @@ class tsa(cmd.Cmd):
 		cprint("\n")
 		cprint("TSA COMMAND LIST:".center(30), "green")
 		cprint("\n")
-		cprint("1. Perform a word-frequency analysis: word_count".center(10), "green")
-		cprint("2. Perform sentiment analysis using the Alchemy API: analyse_sentiments ".center(10), "green")
-		cprint("3. Perform emotion analysis using the Alchemy API: analyse_emotions".center(10), "green") 
+		cprint("1. Perform a word-frequency analysis: count".center(10), "green")
+		cprint("2. Perform sentiment analysis using the Alchemy API: sentim ".center(10), "green")
+		cprint("3. Perform emotion analysis using the Alchemy API: emo".center(10), "green") 
 		cprint("4. To quit: quit ".center(10), "green") 
 
 	intro= introduction()
-	prompt = "(tsa) "
+	prompt = "(sentiment analysis)>> "
 	file = None
 
 
 	@docopt_cmd
-	def do_word_count(self, args):
+	def do_count(self, args):
 		"""Usage: word_count """
 		print(word_counter())
 
 	@docopt_cmd
-	def do_analyse_sentiments(self, args):
+	def do_sentim(self, args):
 		"""Usage: analyse_sentiments """
 		print(sentiment_Analysis())
 		
 	@docopt_cmd
-	def do_analyse_emotions(self, args):
+	def do_emo(self, args):
 		"""Usage: analyse_emotions"""
 		print(emotions_Analysis())
 		
@@ -109,10 +102,3 @@ if __name__ == "__main__":
 	except KeyboardInterrupt:
 		#os.system("clear")
 		cprint("Exiting Application. Catch you later!", "red") 
-
-# opt = docopt(__doc__, sys.argv[1:])
-
-# if opt['--interactive']:
-# 	tsa().cmdloop()
-
-# print (opt) 
